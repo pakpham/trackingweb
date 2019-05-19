@@ -6,19 +6,18 @@ import csv
 
 
 def findText(url, obj1, obj2, par1, par2):
-        cookies = {'PHPSESSID': 'cpihfb42iukgk0b8llrmdr6044', '_ga':'GA1.3.844880961.1557544362','_gat':'1','_gid':'GA1.3.1691361320.1558162498', 'authentic':'a%3A7%3A%7Bs%3A5%3A%22email%22%3Bs%3A17%3A%22pakpham%40gmail.com%22%3Bs%3A8%3A%22password%22%3Bs%3A8%3A%22qfmqtpaq%22%3Bs%3A8%3A%22lydokhoa%22%3Bs%3A0%3A%22%22%3Bs%3A9%3A%22trangthai%22%3Bi%3A1%3Bs%3A4%3A%22date%22%3Bi%3A1557547248%3Bs%3A8%3A%22checksum%22%3Bs%3A40%3A%220a28960b6e87faa6552c2896e60b943f67ec8f22%22%3Bs%3A4%3A%22type%22%3Bi%3A2%3B%7D'}
-        #web = rq.get('https://vieclamcantho.com.vn/ho-so-chi-tiet-29623-la-thi-thuy-trang.html', cookies = cookies)
-        text = rq.get(url,cookies = cookies).text
-        pos_text = 0
-        length_text  = len(text)
-        pos_text = text.find(obj1, pos_text, length_text)
-        end_text = text.find(obj2, pos_text+par1, length_text)
-        # while pos_text != -1:
-        #   print('The number:   ', text[pos_text+111:pos_text+121], "   --at position: ", pos_text)
-        #   pos_text = self.text.find(self.obj, pos_text + 12, length_text)
-        # pass
-        return text[pos_text+par1:end_text+par2]
-        pass
+	cookies = {'PHPSESSID': 'cpihfb42iukgk0b8llrmdr6044', '_ga':'GA1.3.844880961.1557544362','_gat':'1','_gid':'GA1.3.1691361320.1558162498', 'authentic':'a%3A7%3A%7Bs%3A5%3A%22email%22%3Bs%3A17%3A%22pakpham%40gmail.com%22%3Bs%3A8%3A%22password%22%3Bs%3A8%3A%22qfmqtpaq%22%3Bs%3A8%3A%22lydokhoa%22%3Bs%3A0%3A%22%22%3Bs%3A9%3A%22trangthai%22%3Bi%3A1%3Bs%3A4%3A%22date%22%3Bi%3A1557547248%3Bs%3A8%3A%22checksum%22%3Bs%3A40%3A%220a28960b6e87faa6552c2896e60b943f67ec8f22%22%3Bs%3A4%3A%22type%22%3Bi%3A2%3B%7D'}
+	#web = rq.get('https://vieclamcantho.com.vn/ho-so-chi-tiet-29623-la-thi-thuy-trang.html', cookies = cookies)
+	text = rq.get(url,cookies = cookies).text
+	pos_text = 0
+	length_text  = len(text)
+	pos_text = text.find(obj1, pos_text, length_text)
+	if pos_text != -1:
+		end_text = text.find(obj2, pos_text+par1, length_text)
+		return text[pos_text+par1:end_text+par2]
+	elif pos_text == -1:
+		end_text = pos_text
+		return "NOT FOUND"
 
 
 class member:
@@ -96,12 +95,14 @@ class LinkFind:
 			member.age      =findText(temp_url,"id='birthday'", '</', 77, 0)
 			member.add      =findText(temp_url,"id='address'", '</div>', 73, 0)
 			member.mail     =findText(temp_url,"data-email=",'"', 12, 0)
+			member.fb 		=findText(temp_url, "book'>", '"', 122, 0)
 			member.link 	=temp_url
 			member.id 		=id
 			#data.insert(0, temp_url)
 			# f = open("Test99.csv", "a",  encoding="utf-8")
 			# f.write(member.__repr__()+'\n')
 			# f.close();
+
 			with open('data.csv', newline='', mode='a', encoding="utf-8") as csv_file:
 				fieldnames = ['id','name', 'age', 'phone','add','mail','fb','link']
 				writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
